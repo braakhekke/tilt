@@ -1,0 +1,91 @@
+{
+  "glacier": "Rh\u00f4ne",
+  "provider": "CDSE via Tongues from Space",
+  "level": "L1C",
+  "source": "https://tonguesfromspace.org/switzerland/rhone/",
+  "rendering": "Same Copernicus Browser optimized true-colour recipe as Aletsch",
+  "extent": "Unchanged 9:16 export frame from the source tab; matches user-supplied reference",
+  "size": [
+    1080,
+    1920
+  ],
+  "scenes": [
+    {
+      "year": 2016,
+      "date": "2016-09-29",
+      "orbit": "R065",
+      "file": "rhone-2016.webp",
+      "sha256": "09ee5dc2cf1b030e6d1ff559aa8532b7ad1fd51e4cb554cba904ab8eabe343a9"
+    },
+    {
+      "year": 2017,
+      "date": "2017-08-25",
+      "orbit": "R065",
+      "file": "rhone-2017.webp",
+      "sha256": "9dca414fc6d500ddcf6cbcd9456a2c2c26d68a5fb145fa5a13f43861fc7d8138"
+    },
+    {
+      "year": 2018,
+      "date": "2018-10-04",
+      "orbit": "R065",
+      "file": "rhone-2018.webp",
+      "sha256": "f3d1b14cca4337afaea5b22bf47ef07b9bb60ee801de9b405a22226e95dbcaa3"
+    },
+    {
+      "year": 2019,
+      "date": "2019-09-29",
+      "orbit": "R065",
+      "file": "rhone-2019.webp",
+      "sha256": "4a4a2e09a297431928354d1e1ac818843a92c057cea2364011d93bdbce0d7de5"
+    },
+    {
+      "year": 2020,
+      "date": "2020-09-13",
+      "orbit": "R065",
+      "file": "rhone-2020.webp",
+      "sha256": "2b894af22dc688b0c8ccc3f73dcbb3b307abec5f426af98b0c58024113f04edc"
+    },
+    {
+      "year": 2021,
+      "date": "2021-09-23",
+      "orbit": "R065",
+      "file": "rhone-2021.webp",
+      "sha256": "627304526660ab343cf196a2c962659751958d576233fca7a3f12cc2e53e1c87"
+    },
+    {
+      "year": 2022,
+      "date": "2022-08-09",
+      "orbit": "R065",
+      "file": "rhone-2022.webp",
+      "sha256": "a765239f8f0fc53553e0de6999a735bc64d43ed06934e8d7f12b84e7254ca6b0"
+    },
+    {
+      "year": 2023,
+      "date": "2023-09-28",
+      "orbit": "R065",
+      "file": "rhone-2023.webp",
+      "sha256": "b2628826b76068307a59ac17a5f9a18381ed826c9ba765eecd29be6639f78125"
+    },
+    {
+      "year": 2024,
+      "date": "2024-08-23",
+      "orbit": "R065",
+      "file": "rhone-2024.webp",
+      "sha256": "486cac3c9e6b5543580c7c1e52512db26b676880b2b6f539bb3b3cbd755e12a4"
+    },
+    {
+      "year": 2025,
+      "date": "2025-08-18",
+      "orbit": "R065",
+      "file": "rhone-2025.webp",
+      "sha256": "f72b109ad8b30088782a971f9e83ffd76793a51083be0ac14582d88a9dc1211c"
+    },
+    {
+      "year": 2026,
+      "date": "2026-09-27",
+      "orbit": "R065",
+      "file": "rhone-2026.webp",
+      "sha256": "14acfbfa592b880dbc227ea84971de9e3738fa48a7e930c06d5cd6c2e1f4d01d"
+    }
+  ]
+}
