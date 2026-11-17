@@ -1,0 +1,188 @@
+{
+  "sensor": "Sentinel-2 MSI",
+  "level": "L1C",
+  "provider": "Copernicus Data Space Ecosystem",
+  "exporter": "https://tonguesfromspace.org/switzerland/aletsch/",
+  "source_code": "https://github.com/braakhekke/tonguesfromspace/blob/main/js/03-imagery.js",
+  "color": {
+    "recipe": "Sentinel-2 L1C True Color Optimized / Copernicus Browser",
+    "bands": [
+      "B04",
+      "B03",
+      "B02"
+    ],
+    "maxR": 3,
+    "midR": 0.13,
+    "sat": 1.3,
+    "gamma": 2.3,
+    "gOff": 0.01,
+    "ray": {
+      "red": 0.013,
+      "green": 0.024,
+      "blue": 0.041
+    }
+  },
+  "crop": {
+    "original_size": [
+      1080,
+      1920
+    ],
+    "rectangle": [
+      128,
+      444,
+      808,
+      1653
+    ],
+    "output_size": [
+      1080,
+      1920
+    ],
+    "resampling": "Lanczos",
+    "notes": "Identical crop for all years, visually matched to supplied reference. No model enhancement."
+  },
+  "scenes": [
+    {
+      "year": "2016",
+      "date": "2016-08-23",
+      "orbit": "R108",
+      "selection": "hand-picked",
+      "satellite": "S2A",
+      "tile": "32TMS",
+      "time_utc": "10:30",
+      "sun_elevation_deg": "53.1",
+      "product_ids": "S2A_MSIL1C_20160823T103022_N0500_R108_T32TMS_20231026T151246",
+      "file": "2016.webp",
+      "sha256": "bb9c8609f4d6448ad94283778c4043af00422a1300bf2329e3063f78831065f3"
+    },
+    {
+      "year": "2017",
+      "date": "2017-10-17",
+      "orbit": "R108",
+      "selection": "hand-picked",
+      "satellite": "S2A",
+      "tile": "32TMS",
+      "time_utc": "10:30",
+      "sun_elevation_deg": "33.6",
+      "product_ids": "S2A_MSIL1C_20171017T103021_N0500_R108_T32TMS_20231015T102148",
+      "file": "2017.webp",
+      "sha256": "eef490aaf6be2071618fa7bc0359c9092de45988437d7177007c1410eb927767"
+    },
+    {
+      "year": "2018",
+      "date": "2018-09-27",
+      "orbit": "R108",
+      "selection": "hand-picked",
+      "satellite": "S2B",
+      "tile": "32TMS",
+      "time_utc": "10:30",
+      "sun_elevation_deg": "41.1",
+      "product_ids": "S2B_MSIL1C_20180927T103019_N0500_R108_T32TMS_20230729T123122",
+      "file": "2018.webp",
+      "sha256": "cc713ca30519076664879ae823d2d1e2df29a450f0855ccfcce7fa22d612c9ab"
+    },
+    {
+      "year": "2019",
+      "date": "2019-09-12",
+      "orbit": "R108",
+      "selection": "hand-picked",
+      "satellite": "",
+      "tile": "",
+      "time_utc": "",
+      "sun_elevation_deg": "",
+      "product_ids": "",
+      "file": "2019.webp",
+      "sha256": "fc324cbbaab7972c24dfd79048c3f6a96ed0142d287ea2510a7b47d65101c507"
+    },
+    {
+      "year": "2020",
+      "date": "2020-08-27",
+      "orbit": "R108",
+      "selection": "hand-picked",
+      "satellite": "S2B",
+      "tile": "32TMS",
+      "time_utc": "10:25",
+      "sun_elevation_deg": "51.9",
+      "product_ids": "S2B_MSIL1C_20200827T102559_N0500_R108_T32TMS_20230521T193632",
+      "file": "2020.webp",
+      "sha256": "a1568cfdafc2b7ba99673ddba3c63bd2bec9889518ccaaa3c047476eea6f8f05"
+    },
+    {
+      "year": "2021",
+      "date": "2021-10-16",
+      "orbit": "R108",
+      "selection": "hand-picked",
+      "satellite": "S2A",
+      "tile": "32TMS",
+      "time_utc": "10:30",
+      "sun_elevation_deg": "34",
+      "product_ids": "S2A_MSIL1C_20211016T103031_N0500_R108_T32TMS_20230107T085204",
+      "file": "2021.webp",
+      "sha256": "abe2a14203c2fff8142bf21b35f724c091f912f0fec05124e85dbfd9327e693d"
+    },
+    {
+      "year": "2022",
+      "date": "2022-10-06",
+      "orbit": "R108",
+      "selection": "hand-picked",
+      "satellite": "",
+      "tile": "",
+      "time_utc": "",
+      "sun_elevation_deg": "",
+      "product_ids": "",
+      "file": "2022.webp",
+      "sha256": "6da3e7b9cb13211416f4875a5fe11414a514fd26a71e99d06071939b6a75f291"
+    },
+    {
+      "year": "2023",
+      "date": "2023-09-26",
+      "orbit": "R108",
+      "selection": "hand-picked",
+      "satellite": "",
+      "tile": "",
+      "time_utc": "",
+      "sun_elevation_deg": "",
+      "product_ids": "",
+      "file": "2023.webp",
+      "sha256": "242b8d2ba9958d06727badc8f94cf54a260c0456e0082a41e8bcdf4fdd7a78aa"
+    },
+    {
+      "year": "2024",
+      "date": "2024-08-31",
+      "orbit": "R108",
+      "selection": "hand-picked",
+      "satellite": "",
+      "tile": "",
+      "time_utc": "",
+      "sun_elevation_deg": "",
+      "product_ids": "",
+      "file": "2024.webp",
+      "sha256": "11495b4e19665596565dce4cb49bf8c990676e0f0fb77585ef7d3e195a5273e7"
+    },
+    {
+      "year": "2025",
+      "date": "2025-09-20",
+      "orbit": "R108",
+      "selection": "hand-picked",
+      "satellite": "",
+      "tile": "",
+      "time_utc": "",
+      "sun_elevation_deg": "",
+      "product_ids": "",
+      "file": "2025.webp",
+      "sha256": "d209a1238941ecd91fa7f885de2fb6b820cb6917e54e9034ae250e553c953250"
+    },
+    {
+      "year": "2026",
+      "date": "2026-09-12",
+      "orbit": "R108",
+      "selection": "hand-picked",
+      "satellite": "",
+      "tile": "",
+      "time_utc": "",
+      "sun_elevation_deg": "",
+      "product_ids": "",
+      "file": "2026.webp",
+      "sha256": "d9ed2a5d58ee152187787632e721878519a46bf4c06d91d81c13347b6b002f81"
+    }
+  ]
+}
