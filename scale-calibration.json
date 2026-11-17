@@ -1,0 +1,17 @@
+{
+  "aletsch": {
+    "metres_per_image_pixel": 4.948639684021375,
+    "source_scale_label": "2 km",
+    "source_scale_css_pixels": 90,
+    "source_export_frame_css_pixels": 381.9375,
+    "image_registration_scale": 1.5880720355679772,
+    "matching_points": 1346
+  },
+  "rhone": {
+    "metres_per_image_pixel": 3.8862179487179485,
+    "source_scale_label": "1 km",
+    "source_scale_css_pixels": 91,
+    "source_export_frame_css_pixels": 381.9375
+  },
+  "notes": "Ground scale calibrated from visible source-map metric scale. Crops are north-up EPSG:3857; source scale is rounded to CSS pixels. Recompute displayed scale using object-fit:cover enlargement on resize."
+}
