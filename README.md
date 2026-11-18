@@ -25,3 +25,5 @@ The horizontal slider reveals 2016 against 2026. Back to tilt (or reset) leaves 
 Comparison uses a small semicircular chevron handle on the left edge: drag inward to move the before/after divider. It supports arrow keys and Home/End. The launch pill lists tilt, slide and shake on separate lines.
 
 Opening guide: full glacier name and years above animated tilt/slide/shake phone symbols; tap anywhere starts. Reduced-motion preferences disable animations. Menu removed; shake changes glacier. Comparison uses a transparent 72×96 px grab target inset 24 px from either edge, with two chevrons mid-comparison, one at endpoints, and automatic return to tilt at the left edge. Labels and locator use stronger shadows/strokes for contrast.
+
+Sideways phone tilt also moves the comparison divider: 35° covers the full width, with a 3° activation threshold and smoothing. Rightward tilt from the resting pose opens comparison; turning back to the left endpoint restores timeline tilt. Manual slider input recalibrates sideways motion around the current divider position; recenter and glacier changes recalibrate both axes. Motion ignores active touch gestures.
