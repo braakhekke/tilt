@@ -15,3 +15,5 @@ The three-dot button opens the glacier picker. Tilt pauses while the picker is o
 Controls fade when the phone is still. Tap the image to reveal the year and glacier selector. The small north-up scale is calibrated separately for each crop (`scale-calibration.json`) and recomputed from the image’s actual cover scaling on resize. Source-map scale widths are rounded to CSS pixels, so ground distances are approximate. Typography uses Avenir Next/Avenir where available with system fallbacks, for controls, dates and glacier names.
 
 Pinch to zoom (1×–4×); use two fingers to pan. One-finger vertical swipes still change the year. Zoom and pan stay fixed across years, reset on glacier selection, and the metric scale updates at every zoom level. Double-tap resets the view and year to 2021.
+
+The small circular-arrow button recenters motion at the current phone posture and returns to 2021, preserving zoom. Tilt spans about 24° from 2016 to 2026 (2.4° per year), with smoothing and hysteresis to keep frames steady. Tap the image to reveal the reset control.
