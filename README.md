@@ -19,3 +19,5 @@ Pinch to zoom (1×–4×); use two fingers to pan. One-finger vertical swipes st
 The small circular-arrow button recenters motion at the current phone posture and returns to 2021, preserving zoom. Tilt spans about 24° from 2016 to 2026 (2.4° per year), with smoothing and hysteresis to keep frames steady. Tap the image to reveal the reset control.
 
 Top-left local names and country/canton accompany a frameless GLAMOS 2023 overview. Its approximate image footprint follows cover cropping, pinch zoom and pan. See locator-provenance.json. Identity, overview, north arrow and reset fade with the year; the glacier picker and metric scale remain visible.
+
+The horizontal slider reveals 2016 against 2026. Back to tilt (or reset) leaves comparison. Motion pauses during comparison. Shake three times within 700 ms to switch glacier, with a 2.2 s cooldown; motion permission is requested from the start gesture on iOS. Manual glacier selection remains available. Comparison controls fade with the year.
