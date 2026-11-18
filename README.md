@@ -1,35 +1,39 @@
-# Glacier tilt viewer
+# Tilt
 
-Live: https://braakhekke.github.io/tilt/
+Glacier change, in your hands. Eleven years of satellite imagery, controlled by how you move your phone.
 
-Eleven exact-date CDSE Sentinel-2 Level-1C scenes per glacier (Aletsch and Rhône), 2016–2026, exported through Tongues from Space with the Copernicus Browser true-colour optimized recipe. All years use the same crop. `imagery.json` and `rhone-imagery.json` record dates, orbit, rendering parameters and checksums.
+**[Open Tilt →](https://braakhekke.github.io/tilt/)**
 
-Starts at 2021. Tap to enable motion on a phone. Tilt the top edge away to advance; tilt it towards you to go back. Swipe up/down or use arrow keys as a fallback. Double-tap to return to 2021.
+<p>
+  <img src="phone-start.jpg" alt="Tilt opening guide on a phone" width="230">
+  <img src="phone-compare.jpg" alt="2016 and 2026 glacier comparison on a phone" width="230">
+</p>
 
-Static GitHub Pages deployment from the root of `main`; no API keys or external runtime dependencies. The 1080×1920 frames cover a portrait phone viewport; landscape preserves the full portrait image.
+## Try it
 
-Imagery: modified Copernicus Sentinel data, via CDSE. Export pipeline: Tongues from Space, Jochem Braakhekke.
+Tap anywhere to start and allow motion access.
 
-The three-dot button opens the glacier picker. Tilt pauses while the picker is open. Selecting a glacier resets to 2021, retains motion permission, and updates the shareable URL (`#aletsch` or `#rhone`). Only the active glacier is preloaded; switching releases the previous decoded frames.
+| Gesture | What happens |
+| --- | --- |
+| **Pitch** or swipe up/down | Explore 2016–2026, starting at 2021. |
+| **Roll** or swipe sideways | Open the 2016/2026 comparison at the midpoint. |
+| **Pitch forward** in comparison | Return to 2021, centered at your current phone angle. |
+| **Shake** or tap the title chevron | Switch glacier. |
+| **Pinch** / two-finger drag | Zoom / pan. |
+| **Set level** | Make your current phone position the center again. |
 
-Controls fade when the phone is still. Tap the image to reveal the year and glacier selector. The small north-up scale is calibrated separately for each crop (`scale-calibration.json`) and recomputed from the image’s actual cover scaling on resize. Source-map scale widths are rounded to CSS pixels, so ground distances are approximate. Typography uses Avenir Next/Avenir where available with system fallbacks, for controls, dates and glacier names.
+A light haptic tick accompanies pitch-driven year changes where vibration is supported. Safari on iPhone does not support web vibration. Swipes and the glacier picker also work without motion access.
 
-Pinch to zoom (1×–4×); use two fingers to pan. One-finger vertical swipes still change the year. Zoom and pan stay fixed across years, reset on glacier selection, and the metric scale updates at every zoom level. Double-tap resets the view and year to 2021.
+## The imagery
 
-The small circular-arrow button recenters motion at the current phone posture and returns to 2021, preserving zoom. Tilt spans about 24° from 2016 to 2026 (2.4° per year), with smoothing and hysteresis to keep frames steady. Tap the image to reveal the reset control.
+**Grosser Aletschgletscher** and **Rhonegletscher**, Switzerland · Wallis.
 
-Top-left local names and country/canton accompany a frameless GLAMOS 2023 overview. Its approximate image footprint follows cover cropping, pinch zoom and pan. See locator-provenance.json. Identity, overview, north arrow and reset fade with the year; the glacier picker and metric scale remain visible.
+Eleven Sentinel-2 Level-1C scenes per glacier, exported through [Tongues from Space](https://tonguesfromspace.org/) using CDSE imagery and the Copernicus Browser optimized true-colour recipe. Every year uses the same crop; acquisition dates appear below the year.
 
-The horizontal slider reveals 2016 against 2026. Back to tilt (or reset) leaves comparison. Motion pauses during comparison. Shake three times within 700 ms to switch glacier, with a 2.2 s cooldown; motion permission is requested from the start gesture on iOS. Manual glacier selection remains available. Comparison controls fade with the year.
+Modified Copernicus Sentinel data · CDSE · Tongues from Space / Jochem Braakhekke. Locator outlines: GLAMOS (2023). Scale and overview footprints are approximate.
 
-Comparison uses a small semicircular chevron handle on the left edge: drag inward to move the before/after divider. It supports arrow keys and Home/End. The launch pill lists tilt, slide and shake on separate lines.
+## Run it
 
-Opening guide: full glacier name and years above animated tilt/slide/shake phone symbols; tap anywhere starts. Reduced-motion preferences disable animations. Menu removed; shake changes glacier. Comparison uses a transparent 72×96 px grab target inset 24 px from either edge, with two chevrons mid-comparison, one at endpoints, and automatic return to tilt at the left edge. Labels and locator use stronger shadows/strokes for contrast.
+Static HTML and local images; no build step, API keys or runtime services. Serve the repository with any static web server. GitHub Pages publishes the root of `main`.
 
-Sideways phone tilt also moves the comparison divider: 35° covers the full width, with a 3° activation threshold and smoothing. Rightward tilt from the resting pose opens comparison; turning back to the left endpoint restores timeline tilt. Manual slider input recalibrates sideways motion around the current divider position; recenter and glacier changes recalibrate both axes. Motion ignores active touch gestures.
-
-Mode changes use deliberate movement: sideways pitch-independent comparison entry requires 8°, then reaches the far edge at 35° total. During comparison, 10° of forward pitch from the comparison posture returns to timeline mode and recalibrates sideways control. Small pitch changes do not interrupt comparison. The title chevron opens a minimal translucent glacier picker; motion pauses while it is open. Opening instructions name pitch and show vertical arrows, sideways tilt/slide and shake/chevron options.
-
-Pitch/roll wording now matches gestures. Rolling or a one-finger sideways swipe opens comparison at 50%; further horizontal movement moves the divider. No resting comparison handle or back button. Vertical swipes are axis-locked to year changes. Scale centered at bottom, north independent at left. Acquisition dates below the year use three-letter months (paired dates in comparison). Title/country text slightly larger, glacier control at least 48 px high, and picker focus uses an underline instead of a box.
-
-Forward pitch from comparison now returns to 2021 and centers pitch at the current phone posture. The Set level phone/bubble symbol button performs the same recentering, preserving zoom.
+[Scene metadata](imagery.json) · [Rhône metadata](rhone-imagery.json) · [Scale calibration](scale-calibration.json) · [Outline provenance](locator-provenance.json)
