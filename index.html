@@ -118,6 +118,8 @@ button:focus-visible{outline:1px solid #ffffffb3;outline-offset:3px}
 #picker button:focus-visible{outline:none;text-decoration:underline;text-underline-offset:5px}
 #frame:has(#start:not([hidden])) #stamp{visibility:hidden}
 @media(prefers-reduced-motion:reduce){#acquired{transition:none}}
+#reset{width:94px;gap:7px;padding:0 10px;border-radius:999px;background:#14201955;border-color:#ffffff25;font-size:11px;opacity:.8}
+#reset svg{width:21px;height:24px;flex:none;stroke-width:1.35}
 </style>
 </head>
 <body>
@@ -131,7 +133,7 @@ button:focus-visible{outline:1px solid #ffffffb3;outline-offset:3px}
 </span><span class="intro-tap">Tap anywhere to start</span>
 </button><button id="retry" hidden>Try again</button><div id="notice" role="status">Loading glacier · 2021</div><div id="stamp" aria-hidden="true"><div id="year">2021</div><div id="acquired"></div></div><div id="credit">Modified Copernicus Sentinel data · CDSE · Tongues from Space</div>
 <section id="identity"><h1><button id="glacier-toggle" aria-label="Choose glacier" aria-haspopup="dialog" aria-controls="picker" aria-expanded="false"><span id="glacier-title"></span><svg viewBox="0 0 16 10" aria-hidden="true"><path d="M2 2l6 6 6-6"/></svg></button></h1><p id="glacier-place"></p><svg id="locator" viewBox="0 0 120 136" role="img" aria-label="Glacier outline and current view"><path id="locator-outline"/><rect id="locator-view"/></svg></section>
-<button id="reset" class="is-quiet" aria-label="Recenter tilt" title="Recenter tilt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6"/></svg></button>
+<button id="reset" class="is-quiet" aria-label="Set phone level to 2021" title="Use this phone position as the center · 2021"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M10 5h4M2 12h7m6 0h7M11 19h2"/><circle cx="12" cy="12" r="2"/></svg><span>Set level</span></button>
 <div id="map-key" hidden role="img" aria-label="North is up. Scale bar"><div class="north-key" aria-hidden="true"><span>N</span><svg viewBox="0 0 10 24" fill="none"><path d="M5 24V4" stroke="currentColor" stroke-width=".8"/><path d="M5 0L9 9 5 7 1 9Z" fill="currentColor"/></svg></div><div class="distance-key" aria-hidden="true"><span id="scale-label"></span><span id="scale-bar"></span></div></div>
 <div id="comparison" class="is-quiet"><button id="compare-range" hidden type="button" role="slider" aria-label="Slide to compare 2016 and 2026" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><svg class="chevron-left" viewBox="0 0 12 20" aria-hidden="true"><path d="M9 4l-6 6 6 6"/></svg><svg class="chevron-right" viewBox="0 0 12 20" aria-hidden="true"><path d="M3 4l6 6-6 6"/></svg></button></div>
 <dialog id="picker" aria-label="Choose glacier"><button data-glacier="aletsch"><span>Grosser Aletschgletscher<small>Switzerland · Wallis</small></span><i aria-hidden="true"></i></button><button data-glacier="rhone"><span>Rhonegletscher<small>Switzerland · Wallis</small></span><i aria-hidden="true"></i></button></dialog></div>
@@ -186,7 +188,7 @@ async function openGlacier(){const id=location.hash.slice(1).toLowerCase(),entry
 function pitch(e){const a=screen.orientation?.angle??window.orientation??0;if(a===90)return e.gamma;if(a===270||a===-90)return e.gamma===null?null:-e.gamma;if(a===180)return e.beta;return e.beta===null?null:-e.beta}
 function roll(e){const a=screen.orientation?.angle??window.orientation??0;if(a===90)return e.beta;if(a===270||a===-90)return e.beta===null?null:-e.beta;if(a===180)return e.gamma===null?null:-e.gamma;return e.gamma}
 function orient(e){const raw=pitch(e),side=roll(e);if(Number.isFinite(raw))latestPitch=raw;if(Number.isFinite(side))latestRoll=side;if(!active||!ready||pointers.size||compareDrag!==null||picker.open)return;
-if(comparing&&Number.isFinite(raw)){if(comparePitchBaseline===null)comparePitchBaseline=raw;const forward=((raw-comparePitchBaseline+180)%360+360)%360-180;comparePitchFiltered+=.18*(forward-comparePitchFiltered);if(comparePitchFiltered>=FORWARD_THRESHOLD){leaveComparison();show(selected);baseline=raw;center=selected;filtered=0;return}}
+if(comparing&&Number.isFinite(raw)){if(comparePitchBaseline===null)comparePitchBaseline=raw;const forward=((raw-comparePitchBaseline+180)%360+360)%360-180;comparePitchFiltered+=.18*(forward-comparePitchFiltered);if(comparePitchFiltered>=FORWARD_THRESHOLD){levelPhone(raw);return}}
 if(Number.isFinite(side)){if(rollBaseline===null){rollBaseline=side;rollAnchor=comparing?Number(compareRange.value):0;rollFiltered=0}else{const lateral=((side-rollBaseline+180)%360+360)%360-180;rollFiltered+=.18*(lateral-rollFiltered);const position=Math.max(0,Math.min(100,rollAnchor+rollFiltered/rollSpan*100)),split=position>=99?100:position<=1?0:position;if(comparing){if(split<=1){leaveComparison();show(selected);return}if(Math.abs(Number(compareRange.value)-split)>.35){compareRange.value=split;compare()}return}if(Math.abs(rollFiltered)>SIDEWAYS_THRESHOLD){compareRange.value=50;compare();calibrateRoll();return}}}
 if(comparing||!Number.isFinite(raw))return;if(baseline===null){baseline=raw;center=selected;return}const delta=((raw-baseline+180)%360+360)%360-180;filtered+=.2*(delta-filtered);const position=center+filtered/2.4,target=Math.max(0,Math.min(10,Math.round(position)));if(target!==selected&&Math.abs(position-selected)>.65)show(target)}
 
@@ -210,7 +212,8 @@ glacierToggle.addEventListener('click',()=>{drag=null;picker.showModal();positio
 picker.addEventListener('click',e=>{const button=e.target.closest('[data-glacier]');if(button){picker.close();if(button.dataset.glacier!==glacier?.id)location.hash=button.dataset.glacier;return}const r=picker.getBoundingClientRect();if(e.target===picker&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom))picker.close()});
 picker.addEventListener('close',()=>{glacierToggle.setAttribute('aria-expanded','false');recenter();glacierToggle.focus();revealHud(2800)});
 reset.addEventListener('focus',()=>revealHud(2400));
-reset.addEventListener('click',()=>{baseline=latestPitch;center=5;filtered=0;show(5);calibrateRoll();revealHud(2800)});
+function levelPhone(pose=latestPitch){if(!ready)return;leaveComparison();show(5);baseline=Number.isFinite(pose)?pose:null;center=5;filtered=0;calibrateRoll();revealHud(2800)}
+reset.addEventListener('click',()=>levelPhone());
 image.addEventListener('load',updateMapKey);
 screen.orientation?.addEventListener('change',recenter);document.addEventListener('visibilitychange',()=>{if(!document.hidden)recenter()});window.addEventListener('hashchange',openGlacier);
 retry.addEventListener('click',()=>{retry.hidden=true;if(ready)show(selected);else openGlacier()});
