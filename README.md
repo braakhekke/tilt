@@ -22,7 +22,7 @@ Tap anywhere to start and allow motion access.
 | **Pinch** / two-finger drag | Zoom / pan. |
 | **Set level** | Make your current phone position the center again. |
 
-A light haptic tick accompanies pitch-driven year changes where vibration is supported. Safari on iPhone does not support web vibration. Swipes and the glacier picker also work without motion access.
+Swipes and the glacier picker also work without motion access.
 
 ## The imagery
 
