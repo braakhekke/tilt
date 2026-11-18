@@ -21,3 +21,5 @@ The small circular-arrow button recenters motion at the current phone posture an
 Top-left local names and country/canton accompany a frameless GLAMOS 2023 overview. Its approximate image footprint follows cover cropping, pinch zoom and pan. See locator-provenance.json. Identity, overview, north arrow and reset fade with the year; the glacier picker and metric scale remain visible.
 
 The horizontal slider reveals 2016 against 2026. Back to tilt (or reset) leaves comparison. Motion pauses during comparison. Shake three times within 700 ms to switch glacier, with a 2.2 s cooldown; motion permission is requested from the start gesture on iOS. Manual glacier selection remains available. Comparison controls fade with the year.
+
+Comparison uses a small semicircular chevron handle on the left edge: drag inward to move the before/after divider. It supports arrow keys and Home/End. The launch pill lists tilt, slide and shake on separate lines.
