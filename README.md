@@ -23,3 +23,5 @@ Top-left local names and country/canton accompany a frameless GLAMOS 2023 overvi
 The horizontal slider reveals 2016 against 2026. Back to tilt (or reset) leaves comparison. Motion pauses during comparison. Shake three times within 700 ms to switch glacier, with a 2.2 s cooldown; motion permission is requested from the start gesture on iOS. Manual glacier selection remains available. Comparison controls fade with the year.
 
 Comparison uses a small semicircular chevron handle on the left edge: drag inward to move the before/after divider. It supports arrow keys and Home/End. The launch pill lists tilt, slide and shake on separate lines.
+
+Opening guide: full glacier name and years above animated tilt/slide/shake phone symbols; tap anywhere starts. Reduced-motion preferences disable animations. Menu removed; shake changes glacier. Comparison uses a transparent 72×96 px grab target inset 24 px from either edge, with two chevrons mid-comparison, one at endpoints, and automatic return to tilt at the left edge. Labels and locator use stronger shadows/strokes for contrast.
