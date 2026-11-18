@@ -1,0 +1,9 @@
+{
+  "source": "Tongues from Space / GLAMOS",
+  "outlines": {
+    "aletsch": "https://tonguesfromspace.org/data/outlines/B36-26.a81c09be49.js",
+    "rhone": "https://tonguesfromspace.org/data/outlines/B43-03.fb8d5de665.js"
+  },
+  "year": 2023,
+  "registration": "Approximate image footprint, anchored to GLAMOS terminus locations using visual pixel registration and calibrated scale. North-up Web Mercator. Overview is contextual, not a survey boundary."
+}

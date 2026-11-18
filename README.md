@@ -17,3 +17,5 @@ Controls fade when the phone is still. Tap the image to reveal the year and glac
 Pinch to zoom (1×–4×); use two fingers to pan. One-finger vertical swipes still change the year. Zoom and pan stay fixed across years, reset on glacier selection, and the metric scale updates at every zoom level. Double-tap resets the view and year to 2021.
 
 The small circular-arrow button recenters motion at the current phone posture and returns to 2021, preserving zoom. Tilt spans about 24° from 2016 to 2026 (2.4° per year), with smoothing and hysteresis to keep frames steady. Tap the image to reveal the reset control.
+
+Top-left local names and country/canton accompany a frameless GLAMOS 2023 overview. Its approximate image footprint follows cover cropping, pinch zoom and pan. See locator-provenance.json. Identity, overview, north arrow and reset fade with the year; the glacier picker and metric scale remain visible.
