@@ -15,9 +15,9 @@ Tap anywhere to start and allow motion access.
 
 | Gesture | What happens |
 | --- | --- |
-| **Pitch** or swipe up/down | Explore 2016–2026, starting at 2021. |
-| **Roll** or swipe sideways | Open the 2016/2026 comparison at the midpoint. |
-| **Pitch forward** in comparison | Return to 2021, centered at your current phone angle. |
+| **Pitch** or swipe up/down in Timeline | Explore 2016–2026. Tilt opens in Timeline at 2021. |
+| **Compare**, then roll or swipe sideways | Slide between 2016 and 2026. |
+| **Timeline** | Return to the year you were viewing. |
 | **Shake** or tap the title chevron | Switch glacier. |
 | **Pinch** / two-finger drag | Zoom / pan. |
 | **Set level** | Make your current phone position the center again. |

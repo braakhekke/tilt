@@ -22,7 +22,8 @@ main{position:absolute;inset:0;touch-action:none;cursor:ns-resize;outline:none}
 #compare-range{position:absolute;left:24px;bottom:111px;transform:translate(-50%,50%);width:72px;height:96px;padding:0;border:0;border-radius:0;background:none;display:flex;align-items:center;justify-content:center;gap:18px;pointer-events:auto;touch-action:none;cursor:ew-resize;color:#fff;filter:drop-shadow(0 1px 2px #000) drop-shadow(0 0 4px #000b)}
 #compare-range svg{width:12px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 #compare-range .chevron-left{display:none}
-#compare-range.is-between .chevron-left{display:block}
+#compare-range.is-between .chevron-left,#compare-range.is-end .chevron-left{display:block}
+#compare-range.is-end .chevron-right{display:none}
 #image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;user-select:none;-webkit-user-drag:none;transform-origin:center;will-change:transform}
 button{font:inherit;font-weight:400;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
 button:focus-visible{outline:1px solid #ffffffb3;outline-offset:3px}
@@ -129,8 +130,8 @@ button:focus-visible{outline:1px solid #ffffffb3;outline-offset:3px}
 <button id="start" aria-label="Tap anywhere to start" hidden>
 <span class="intro-heading"><strong id="intro-name"></strong><span class="intro-years">2016–2026</span></span>
 <span class="intro-guide">
-<span class="intro-row"><svg class="phone-tilt" viewBox="0 0 48 48" aria-hidden="true"><g><rect x="13" y="6" width="22" height="36" rx="4"/><path d="M21 10h6M22 38h4"/></g><path class="motion-mark" d="M24 3v-6m-3 3 3-3 3 3M24 45v6m-3-3 3 3 3-3"/></svg><span>Pitch or swipe up/down to see all years</span></span>
-<span class="intro-row"><svg class="phone-slide" viewBox="0 0 48 48" aria-hidden="true"><g><rect x="13" y="6" width="22" height="36" rx="4"/><path d="M21 10h6M22 38h4"/></g><path class="slide-line" d="M24 14v18"/><path class="slide-chevron" d="M18 21l-3 3 3 3M30 21l3 3-3 3"/></svg><span>Roll or swipe sideways to compare 2016–2026</span></span>
+<span class="intro-row"><svg class="phone-tilt" viewBox="0 0 48 48" aria-hidden="true"><g><rect x="13" y="6" width="22" height="36" rx="4"/><path d="M21 10h6M22 38h4"/></g><path class="motion-mark" d="M24 3v-6m-3 3 3-3 3 3M24 45v6m-3-3 3 3 3-3"/></svg><span>Pitch or swipe up/down in Timeline</span></span>
+<span class="intro-row"><svg class="phone-slide" viewBox="0 0 48 48" aria-hidden="true"><g><rect x="13" y="6" width="22" height="36" rx="4"/><path d="M21 10h6M22 38h4"/></g><path class="slide-line" d="M24 14v18"/><path class="slide-chevron" d="M18 21l-3 3 3 3M30 21l3 3-3 3"/></svg><span>Tap Compare, then roll or swipe sideways</span></span>
 <span class="intro-row"><svg class="phone-shake" viewBox="0 0 48 48" aria-hidden="true"><g><rect x="13" y="6" width="22" height="36" rx="4"/><path d="M21 10h6M22 38h4"/></g><path class="motion-mark" d="M6 16l-3 5 3 5-3 5M42 16l3 5-3 5 3 5"/></svg><span>Shake or press <svg class="inline-chevron" viewBox="0 0 16 10" aria-hidden="true"><path d="M2 2l6 6 6-6"/></svg><span class="sr-only">the chevron</span> for another glacier</span></span>
 </span><span class="intro-tap">Tap anywhere to start</span>
 </button><button id="retry" hidden>Try again</button><div id="notice" role="status">Loading glacier · 2021</div><div id="stamp" aria-hidden="true"><div id="year">2021</div><div id="acquired"></div></div><div id="credit">Modified Copernicus Sentinel data · CDSE · Tongues from Space</div>
@@ -160,8 +161,8 @@ let compareDrag=null;compareRange.value=0;
 let comparing=false,compareRun=0,motionEnabled=false,lastShake=-Infinity,shakeHits=[],lastGravity=null;
 const pointers=new Map();
 let zoom=1,panX=0,panY=0,pinch=null;
-let latestRoll=null,rollBaseline=null,rollAnchor=0,rollFiltered=0,rollSpan=35,comparePitchBaseline=null,comparePitchFiltered=0;
-const SIDEWAYS_THRESHOLD=8,FORWARD_THRESHOLD=10;
+let latestRoll=null,rollBaseline=null,rollAnchor=0,rollFiltered=0;
+const ROLL_SPAN=35;
 let glacier=null,selected=5,ready=false,welcomed=false,active=false,latestPitch=null,baseline=null,center=5,filtered=0,drag=null,toastTimer,yearTimer;
 function toast(text,ms=3500){clearTimeout(toastTimer);notice.classList.remove('tilt-guide');notice.textContent=text;notice.style.opacity=text?'1':'0';if(ms)toastTimer=setTimeout(()=>notice.style.opacity='0',ms)}
 function showTiltGuide(){clearTimeout(toastTimer);notice.classList.add('tilt-guide');notice.innerHTML='<span class="guide-row"><svg viewBox="0 0 16 30" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 27V3M3 8l5-5 5 5"/></svg><span>Top edge away</span><small>Later years</small></span><span class="guide-row"><svg viewBox="0 0 16 30" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 27V3M3 8l5-5 5 5"/></svg><span>Towards you</span><small>Earlier years</small></span>';notice.style.opacity='1';toastTimer=setTimeout(()=>notice.style.opacity='0',6000)}
@@ -171,25 +172,25 @@ function updateMapKey(){updateLocator();if(!glacier||!image.naturalWidth||image.
 function leaveComparison(){
   if(document.activeElement===compareRange)compareToggle.focus();
   compareToggleLabel.textContent='Compare';
+  reset.setAttribute('aria-label','Set phone level to 2021');
+  reset.title='Use this phone position as the center · 2021';
   compareLabels.hidden=true;
   compareRange.hidden=true;compareRange.value=0;positionHandle(0);compareRange.setAttribute("aria-valuenow","0");compareDrag=null;compareRun++;comparing=false;compareImage.hidden=true;compareLine.hidden=true;recenter()}
-function positionHandle(value){const r=viewer.getBoundingClientRect(),x=Math.max(24,Math.min(r.width-24,r.width*value/100));compareRange.style.left=x+'px';compareLabels.style.left=Math.max(48,Math.min(r.width-48,x))+'px';compareRange.classList.remove('is-between');if(value>0)compareRange.classList.add('is-between')}
+function positionHandle(value){const r=viewer.getBoundingClientRect(),x=Math.max(24,Math.min(r.width-24,r.width*value/100));compareRange.style.left=x+'px';compareLabels.style.left=Math.max(48,Math.min(r.width-48,x))+'px';compareRange.classList.toggle('is-between',value>0&&value<100);compareRange.classList.toggle('is-end',value>=100)}
 async function compare(){
   if(!ready)return;
-  const position=Number(compareRange.value);
-  if(position<=0||position>=100){
-    await show(position>=100?0:selected);
-    return;
-  }
   const entry=glacier,run=++compareRun;
   if(!comparing){
-    comparePitchBaseline=latestPitch;
-    comparePitchFiltered=0;
     compareToggleLabel.textContent='Timeline';
+    reset.setAttribute('aria-label','Set phone level to the comparison midpoint');
+    reset.title='Use this phone position as the comparison midpoint';
     if(!entry.frames[0]||!entry.frames[10])toast('Loading comparison…',0);
   }
   comparing=true;
-  try{await Promise.all([load(entry,0),load(entry,10)]);if(run!==compareRun||entry!==glacier)return;image.src=entry.frames[0].src;image.alt=entry.name+' glacier, 2016';compareImage.src=entry.frames[10].src;compareImage.alt=entry.name+' glacier, 2026';compareImage.hidden=false;compareLine.hidden=false;compareRange.hidden=false;compareLabels.hidden=false;const split=Number(compareRange.value);positionHandle(split);compareRange.setAttribute('aria-valuenow',String(Math.round(split)));compareLayer.style.clipPath='inset(0 0 0 '+split+'%)';compareLine.style.left=split+'%';year.textContent='2016 / 2026';acquired.textContent=shortDate(entry.dates[0])+' · '+shortDate(entry.dates[10]);acquired.setAttribute('title',entry.dates[0]+' / '+entry.dates[10]);year.classList.add('is-comparing');viewer.setAttribute('aria-valuetext','Comparing 2016 and 2026');toast('');applyZoom();revealHud(4000)}catch{
+  try{await Promise.all([load(entry,0),load(entry,10)]);if(run!==compareRun||entry!==glacier)return;image.src=entry.frames[0].src;image.alt=entry.name+' glacier, 2016';compareImage.src=entry.frames[10].src;compareImage.alt=entry.name+' glacier, 2026';compareImage.hidden=false;compareLine.hidden=false;compareRange.hidden=false;compareLabels.hidden=false;const split=Number(compareRange.value);
+    compareLabels.firstElementChild.style.visibility=split===0?'hidden':'';
+    compareLabels.lastElementChild.style.visibility=split===100?'hidden':'';
+    positionHandle(split);compareRange.setAttribute('aria-valuenow',String(Math.round(split)));compareLayer.style.clipPath='inset(0 0 0 '+split+'%)';compareLine.style.left=split+'%';year.textContent='2016 / 2026';acquired.textContent=shortDate(entry.dates[0])+' · '+shortDate(entry.dates[10]);acquired.setAttribute('title',entry.dates[0]+' / '+entry.dates[10]);year.classList.add('is-comparing');viewer.setAttribute('aria-valuetext','Comparing 2016 and 2026');toast('');applyZoom();revealHud(4000)}catch{
     if(run!==compareRun||entry!==glacier)return;
     leaveComparison();
     show(selected);
@@ -211,13 +212,26 @@ compareRange.addEventListener('pointermove',e=>{if(compareDrag===e.pointerId)mov
 function endComparisonDrag(e){if(compareDrag!==e.pointerId)return;moveComparison(e);compareDrag=null;recenter();revealHud(4000)}
 compareRange.addEventListener('pointerup',endComparisonDrag);compareRange.addEventListener('pointercancel',()=>{compareDrag=null;recenter();revealHud()});compareRange.addEventListener('lostpointercapture',()=>compareDrag=null);
 compareRange.addEventListener('focus',()=>revealHud(4000));
-compareRange.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();compareRange.value=e.key==='Home'?0:e.key==='End'?100:Math.max(0,Math.min(100,Number(compareRange.value)+(e.key==='ArrowRight'?5:-5)));compare();recenter()});
+function comparisonKeys(e){
+  if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
+  e.preventDefault();
+  compareRange.value=e.key==='Home'?0:e.key==='End'?100:Math.max(0,Math.min(100,Number(compareRange.value)+(e.key==='ArrowRight'?5:-5)));
+  compare();
+  recenter();
+}
+compareRange.addEventListener('keydown',comparisonKeys);
 function applyZoom(){positionHandle(Number(compareRange.value));const r=viewer.getBoundingClientRect(),maxX=r.width*(zoom-1)/2,maxY=r.height*(zoom-1)/2;panX=Math.max(-maxX,Math.min(maxX,panX));panY=Math.max(-maxY,Math.min(maxY,panY));image.style.transform='translate('+panX+'px,'+panY+'px) scale('+zoom+')';compareImage.style.transform=image.style.transform;updateMapKey()}
 function resetZoom(){zoom=1;panX=panY=0;applyZoom()}
 function pinchStart(){const [a,b]=[...pointers.values()],r=viewer.getBoundingClientRect();pinch={distance:Math.max(1,Math.hypot(b.x-a.x,b.y-a.y)),zoom,panX,panY,midX:(a.x+b.x)/2,midY:(a.y+b.y)/2,centerX:r.left+r.width/2,centerY:r.top+r.height/2};drag=null;recenter()}
 function pinchMove(){const [a,b]=[...pointers.values()];if(!a||!b||!pinch)return;zoom=Math.max(1,Math.min(4,pinch.zoom*Math.hypot(b.x-a.x,b.y-a.y)/pinch.distance));const ratio=zoom/pinch.zoom;panX=(a.x+b.x)/2-pinch.centerX-(pinch.midX-pinch.centerX-pinch.panX)*ratio;panY=(a.y+b.y)/2-pinch.centerY-(pinch.midY-pinch.centerY-pinch.panY)*ratio;applyZoom()}
-function calibrateRoll(){rollBaseline=Number.isFinite(latestRoll)?latestRoll:null;rollAnchor=comparing?Number(compareRange.value):0;rollFiltered=0;rollSpan=35;if(comparing){comparePitchBaseline=latestPitch;comparePitchFiltered=0}}
-function recenter(){baseline=null;center=selected;filtered=0;calibrateRoll()}
+function recenter(){
+  baseline=null;
+  center=selected;
+  filtered=0;
+  rollBaseline=latestRoll;
+  rollAnchor=Number(compareRange.value);
+  rollFiltered=0;
+}
 function shortDate(date){const [y,m,d]=date.split('-');return Number(d)+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Number(m)-1]}
 function render(entry,i,announce){if(entry!==glacier)return;image.src=entry.frames[i].src;image.alt=entry.name+' glacier, '+entry.dates[i];image.hidden=false;ready=true;viewer.setAttribute('aria-valuenow',2016+i);viewer.setAttribute('aria-valuetext',entry.name+', '+entry.dates[i]);year.textContent=2016+i;acquired.textContent=shortDate(entry.dates[i]);acquired.setAttribute('title',entry.dates[i]);year.classList.remove('is-comparing');retry.hidden=true;toast('');updateMapKey();revealHud(announce?1600:3200)}
 function load(entry,i){if(entry.frames[i])return Promise.resolve(entry.frames[i]);if(entry.pending.has(i))return entry.pending.get(i);const p=(async()=>{const img=new Image();img.src=entry.prefix+(2016+i)+'.webp';await img.decode();entry.frames[i]=img;return img})();entry.pending.set(i,p);p.finally(()=>entry.pending.delete(i)).catch(()=>{});return p}
@@ -227,24 +241,58 @@ async function openGlacier(){const id=location.hash.slice(1).toLowerCase(),entry
 // Screen-relative pitch: top edge away advances the years.
 function pitch(e){const a=screen.orientation?.angle??window.orientation??0;if(a===90)return e.gamma;if(a===270||a===-90)return e.gamma===null?null:-e.gamma;if(a===180)return e.beta;return e.beta===null?null:-e.beta}
 function roll(e){const a=screen.orientation?.angle??window.orientation??0;if(a===90)return e.beta;if(a===270||a===-90)return e.beta===null?null:-e.beta;if(a===180)return e.gamma===null?null:-e.gamma;return e.gamma}
-function orient(e){const raw=pitch(e),side=roll(e);if(Number.isFinite(raw))latestPitch=raw;if(Number.isFinite(side))latestRoll=side;if(!active||!ready||pointers.size||compareDrag!==null||picker.open)return;
-if(comparing&&Number.isFinite(raw)){if(comparePitchBaseline===null)comparePitchBaseline=raw;const forward=((raw-comparePitchBaseline+180)%360+360)%360-180;comparePitchFiltered+=.18*(forward-comparePitchFiltered);if(comparePitchFiltered>=FORWARD_THRESHOLD){levelPhone(raw);return}}
-if(Number.isFinite(side)){if(rollBaseline===null){rollBaseline=side;rollAnchor=comparing?Number(compareRange.value):0;rollFiltered=0}else{const lateral=((side-rollBaseline+180)%360+360)%360-180;rollFiltered+=.18*(lateral-rollFiltered);const position=Math.max(0,Math.min(100,rollAnchor+rollFiltered/rollSpan*100)),split=position>=99?100:position<=1?0:position;if(comparing){if(split<=1){leaveComparison();show(selected);return}if(Math.abs(Number(compareRange.value)-split)>.35){compareRange.value=split;compare()}return}if(Math.abs(rollFiltered)>SIDEWAYS_THRESHOLD){compareRange.value=50;compare();calibrateRoll();return}}}
-if(comparing||!Number.isFinite(raw))return;if(baseline===null){baseline=raw;center=selected;return}const delta=((raw-baseline+180)%360+360)%360-180;filtered+=.2*(delta-filtered);const position=center+filtered/2.4,target=Math.max(0,Math.min(10,Math.round(position)));if(target!==selected&&Math.abs(position-selected)>.65)show(target)}
+function orient(e){
+  const raw=pitch(e),side=roll(e);
+  if(Number.isFinite(raw))latestPitch=raw;
+  if(Number.isFinite(side))latestRoll=side;
+  if(!active||!ready||pointers.size||compareDrag!==null||picker.open)return;
+
+  if(comparing){
+    if(!Number.isFinite(side))return;
+    if(rollBaseline===null)rollBaseline=side;
+    const lateral=((side-rollBaseline+180)%360+360)%360-180;
+    rollFiltered+=.18*(lateral-rollFiltered);
+    const position=Math.max(0,Math.min(100,rollAnchor+rollFiltered/ROLL_SPAN*100));
+    const split=position>=99?100:position<=1?0:position;
+    if(Math.abs(Number(compareRange.value)-split)>.35){
+      compareRange.value=split;
+      compare();
+    }
+    return;
+  }
+
+  if(!Number.isFinite(raw))return;
+  if(baseline===null){baseline=raw;center=selected;return}
+  const delta=((raw-baseline+180)%360+360)%360-180;
+  filtered+=.2*(delta-filtered);
+  const position=center+filtered/2.4,target=Math.max(0,Math.min(10,Math.round(position)));
+  if(target!==selected&&Math.abs(position-selected)>.65)show(target);
+}
 
 window.addEventListener('deviceorientation',orient,{passive:true});
 async function begin(){let permission=true;const requests=[];try{requests.push(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'?DeviceOrientationEvent.requestPermission():Promise.resolve('granted'));requests.push(typeof DeviceMotionEvent!=='undefined'&&typeof DeviceMotionEvent.requestPermission==='function'?DeviceMotionEvent.requestPermission():Promise.resolve('granted'));const results=await Promise.allSettled(requests);permission=results[0].status==='fulfilled'&&results[0].value==='granted';motionEnabled=results[1].status==='fulfilled'&&results[1].value==='granted'}catch{permission=false}active=permission;recenter();start.hidden=true;compareToggle.hidden=!ready;revealHud(6000);permission?toast(''):toast('Motion is off · slide to compare or swipe for years',4500);if(document.documentElement.requestFullscreen&&!document.fullscreenElement)document.documentElement.requestFullscreen().catch(()=>{})}
 function shake(e){if(!motionEnabled||!ready||picker.open||document.hidden)return;const now=Date.now();let a=e.acceleration;let magnitude;if(a&&[a.x,a.y,a.z].every(Number.isFinite)){magnitude=Math.hypot(a.x,a.y,a.z)}else{a=e.accelerationIncludingGravity;if(!a||![a.x,a.y,a.z].every(Number.isFinite))return;const previous=lastGravity;lastGravity={x:a.x,y:a.y,z:a.z};if(!previous)return;magnitude=Math.hypot(a.x-previous.x,a.y-previous.y,a.z-previous.z)}if(now-lastShake<2200||pointers.size||compareDrag!==null)return;shakeHits=shakeHits.filter(t=>now-t<700);if(magnitude>14&&(!shakeHits.length||now-shakeHits[shakeHits.length-1]>90))shakeHits.push(now);if(shakeHits.length>=3){lastShake=now;shakeHits=[];location.hash=glacier.id==='aletsch'?'rhone':'aletsch'}}
 window.addEventListener('devicemotion',shake,{passive:true});
 start.addEventListener('click',begin);
-viewer.addEventListener('pointerdown',e=>{if(!ready||picker.open||pointers.size>=2)return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});viewer.setPointerCapture(e.pointerId);if(pointers.size===2)pinchStart();else drag={x:e.clientX,y:e.clientY,index:selected,moved:false,axis:null,compareAnchor:comparing?Number(compareRange.value):50,compareX:e.clientX}});
-viewer.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pinch&&pointers.size===2){pinchMove();return}if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.hypot(dx,dy)>8)drag.moved=true;if(!drag.axis){if(Math.max(Math.abs(dx),Math.abs(dy))<12)return;drag.axis=Math.abs(dx)>Math.abs(dy)*1.2?'compare':Math.abs(dy)>Math.abs(dx)*1.2?'years':null;if(!drag.axis)return;if(drag.axis==='compare'&&!comparing){drag.compareX=e.clientX;drag.compareAnchor=50;compareRange.value=50;compare();return}}
-if(drag.axis==='compare'){const r=viewer.getBoundingClientRect();compareRange.value=Math.max(0,Math.min(100,drag.compareAnchor+(e.clientX-drag.compareX)/r.width*100));compare();return}const target=Math.round(drag.index+(drag.y-e.clientY)/(innerHeight*.065));if(comparing||target!==selected)show(target)});
+viewer.addEventListener('pointerdown',e=>{if(!ready||picker.open||pointers.size>=2)return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});viewer.setPointerCapture(e.pointerId);if(pointers.size===2)pinchStart();else drag={x:e.clientX,y:e.clientY,index:selected,moved:false,axis:null,compareAnchor:Number(compareRange.value)}});
+viewer.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pinch&&pointers.size===2){pinchMove();return}if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.hypot(dx,dy)>8)drag.moved=true;if(!drag.axis){if(Math.max(Math.abs(dx),Math.abs(dy))<12)return;drag.axis=Math.abs(dx)>Math.abs(dy)*1.2?'compare':Math.abs(dy)>Math.abs(dx)*1.2?'years':null;if(!drag.axis)return}
+if(comparing&&drag.axis==='compare'){const r=viewer.getBoundingClientRect();compareRange.value=Math.max(0,Math.min(100,drag.compareAnchor+dx/r.width*100));compare()}else if(!comparing&&drag.axis==='years'){const target=Math.max(0,Math.min(10,Math.round(drag.index-dy/(innerHeight*.065))));if(target!==selected)show(target)}});
 
 function endGesture(e){if(!pointers.has(e.pointerId))return;const tapped=pointers.size===1&&!pinch&&drag&&!drag.moved&&e.type==='pointerup';pointers.delete(e.pointerId);pinch=null;drag=null;if(!pointers.size)recenter();if(tapped)revealHud(2800)}
 viewer.addEventListener('pointerup',endGesture);viewer.addEventListener('pointercancel',endGesture);viewer.addEventListener('lostpointercapture',endGesture);
-viewer.addEventListener('keydown',e=>{if(!ready||picker.open)return;const keys=['ArrowUp','ArrowDown','ArrowRight','ArrowLeft','Home','End'];if(!keys.includes(e.key))return;e.preventDefault();if(e.key==='ArrowLeft'||e.key==='ArrowRight'){compareRange.value=comparing?Math.max(0,Math.min(100,Number(compareRange.value)+(e.key==='ArrowRight'?5:-5))):50;compare();recenter();return}show(e.key==='Home'?0:e.key==='End'?10:selected+(['ArrowUp','ArrowRight'].includes(e.key)?1:-1));recenter()});
-viewer.addEventListener('dblclick',()=>{if(!ready)return;resetZoom();show(5);recenter();toast('Centered on 2021',2000)});
+viewer.addEventListener('keydown',e=>{
+  if(!ready||picker.open)return;
+  if(comparing){comparisonKeys(e);return}
+  if(!['ArrowUp','ArrowDown','Home','End'].includes(e.key))return;
+  e.preventDefault();
+  show(e.key==='Home'?0:e.key==='End'?10:selected+(e.key==='ArrowUp'?1:-1));
+  recenter();
+});
+viewer.addEventListener('dblclick',()=>{
+  if(!ready)return;
+  resetZoom();
+  levelPhone();
+});
 function positionPicker(){const r=glacierToggle.getBoundingClientRect();picker.style.left=Math.max(16,r.left)+'px';picker.style.top=Math.min(innerHeight-155,r.bottom+12)+'px'}
 window.addEventListener('resize',()=>{applyZoom();if(picker.open)positionPicker()});
 glacierToggle.addEventListener('focus',()=>revealHud(4000));
@@ -252,7 +300,18 @@ glacierToggle.addEventListener('click',()=>{drag=null;picker.showModal();positio
 picker.addEventListener('click',e=>{const button=e.target.closest('[data-glacier]');if(button){picker.close();if(button.dataset.glacier!==glacier?.id)location.hash=button.dataset.glacier;return}const r=picker.getBoundingClientRect();if(e.target===picker&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom))picker.close()});
 picker.addEventListener('close',()=>{glacierToggle.setAttribute('aria-expanded','false');recenter();glacierToggle.focus();revealHud(2800)});
 reset.addEventListener('focus',()=>revealHud(2400));
-function levelPhone(pose=latestPitch){if(!ready)return;leaveComparison();show(5);baseline=Number.isFinite(pose)?pose:null;center=5;filtered=0;calibrateRoll();revealHud(2800)}
+function levelPhone(){
+  if(!ready)return;
+  if(comparing){
+    compareRange.value=50;
+    compare();
+  }else{
+    show(5);
+  }
+  recenter();
+  baseline=latestPitch;
+  revealHud(2800);
+}
 reset.addEventListener('click',()=>levelPhone());
 image.addEventListener('load',updateMapKey);
 screen.orientation?.addEventListener('change',recenter);document.addEventListener('visibilitychange',()=>{if(!document.hidden)recenter()});window.addEventListener('hashchange',openGlacier);
