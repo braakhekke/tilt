@@ -121,8 +121,7 @@ button:focus-visible{outline:1px solid #ffffffb3;outline-offset:3px}
 #reset svg,#compare-toggle svg{width:21px;height:24px;flex:none;stroke-width:1.35}
 #compare-toggle{left:12px;right:auto;z-index:1}
 #comparison:has(#compare-range:not([hidden])){opacity:1}
-#compare-labels{position:absolute;inset:auto 12px 116px;display:flex;justify-content:space-between;font-size:13px;font-weight:600}
-#compare-labels span{padding:4px 8px;border-radius:6px;background:#142019d9}
+#compare-labels{position:absolute;top:calc(50% - 27px);left:50%;transform:translateX(-50%);display:flex;justify-content:space-between;width:88px;color:#fff;font-size:13px;font-weight:600;line-height:1;text-shadow:0 1px 2px #000,0 0 6px #000,0 0 3px #000}
 </style>
 </head>
 <body>
@@ -174,7 +173,7 @@ function leaveComparison(){
   compareToggleLabel.textContent='Compare';
   compareLabels.hidden=true;
   compareRange.hidden=true;compareRange.value=0;positionHandle(0);compareRange.setAttribute("aria-valuenow","0");compareDrag=null;compareRun++;comparing=false;compareImage.hidden=true;compareLine.hidden=true;recenter()}
-function positionHandle(value){const r=viewer.getBoundingClientRect(),x=Math.max(24,Math.min(r.width-24,r.width*value/100));compareRange.style.left=x+'px';compareRange.classList.remove('is-between');if(value>0)compareRange.classList.add('is-between')}
+function positionHandle(value){const r=viewer.getBoundingClientRect(),x=Math.max(24,Math.min(r.width-24,r.width*value/100));compareRange.style.left=x+'px';compareLabels.style.left=Math.max(48,Math.min(r.width-48,x))+'px';compareRange.classList.remove('is-between');if(value>0)compareRange.classList.add('is-between')}
 async function compare(){
   if(!ready)return;
   const position=Number(compareRange.value);
