@@ -22,8 +22,7 @@ main{position:absolute;inset:0;touch-action:none;cursor:ns-resize;outline:none}
 #compare-range{position:absolute;left:24px;top:50%;transform:translate(-50%,-50%);width:72px;height:96px;padding:0;border:0;border-radius:0;background:none;display:flex;align-items:center;justify-content:center;gap:18px;pointer-events:auto;touch-action:none;cursor:ew-resize;color:#fff;filter:drop-shadow(0 1px 2px #000) drop-shadow(0 0 4px #000b)}
 #compare-range svg{width:12px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 #compare-range .chevron-left{display:none}
-#compare-range.is-between .chevron-left,#compare-range.is-end .chevron-left{display:block}
-#compare-range.is-end .chevron-right{display:none}
+#compare-range.is-between .chevron-left{display:block}
 #image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;user-select:none;-webkit-user-drag:none;transform-origin:center;will-change:transform}
 button{font:inherit;font-weight:400;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
 button:focus-visible{outline:1px solid #ffffffb3;outline-offset:3px}
@@ -171,15 +170,23 @@ function leaveComparison(){
   compareToggleLabel.textContent='Compare';
   compareLabels.hidden=true;
   compareRange.hidden=true;compareRange.value=0;positionHandle(0);compareRange.setAttribute("aria-valuenow","0");compareDrag=null;compareRun++;comparing=false;compareImage.hidden=true;compareLine.hidden=true;recenter()}
-function positionHandle(value){const r=viewer.getBoundingClientRect(),x=Math.max(24,Math.min(r.width-24,r.width*value/100));compareRange.style.left=x+'px';compareRange.classList.remove('is-between');compareRange.classList.remove('is-end');if(value>=100)compareRange.classList.add('is-end');else if(value>0)compareRange.classList.add('is-between')}
-async function compare(){if(!ready)return;if(Number(compareRange.value)<=0){leaveComparison();show(selected);return}const entry=glacier,run=++compareRun;if(!comparing){
+function positionHandle(value){const r=viewer.getBoundingClientRect(),x=Math.max(24,Math.min(r.width-24,r.width*value/100));compareRange.style.left=x+'px';compareRange.classList.remove('is-between');if(value>0)compareRange.classList.add('is-between')}
+async function compare(){
+  if(!ready)return;
+  const position=Number(compareRange.value);
+  if(position<=0||position>=100){
+    await show(position>=100?0:selected);
+    return;
+  }
+  const entry=glacier,run=++compareRun;
+  if(!comparing){
     comparePitchBaseline=latestPitch;
     comparePitchFiltered=0;
     compareToggleLabel.textContent='Timeline';
     if(!entry.frames[0]||!entry.frames[10])toast('Loading comparison…',0);
   }
   comparing=true;
-  try{await Promise.all([load(entry,0),load(entry,10)]);if(run!==compareRun||entry!==glacier)return;image.src=entry.frames[0].src;image.alt=entry.name+' glacier, 2016';compareImage.src=entry.frames[10].src;compareImage.alt=entry.name+' glacier, 2026';compareImage.hidden=false;compareLine.hidden=false;compareRange.hidden=false;compareLabels.hidden=false;const split=Number(compareRange.value);compareLabels.lastElementChild.hidden=split===100;positionHandle(split);compareRange.setAttribute('aria-valuenow',String(Math.round(split)));compareLayer.style.clipPath='inset(0 0 0 '+split+'%)';compareLine.style.left=split+'%';year.textContent='2016 / 2026';acquired.textContent=shortDate(entry.dates[0])+' · '+shortDate(entry.dates[10]);acquired.setAttribute('title',entry.dates[0]+' / '+entry.dates[10]);year.classList.add('is-comparing');viewer.setAttribute('aria-valuetext','Comparing 2016 and 2026');toast('');applyZoom();revealHud(4000)}catch{
+  try{await Promise.all([load(entry,0),load(entry,10)]);if(run!==compareRun||entry!==glacier)return;image.src=entry.frames[0].src;image.alt=entry.name+' glacier, 2016';compareImage.src=entry.frames[10].src;compareImage.alt=entry.name+' glacier, 2026';compareImage.hidden=false;compareLine.hidden=false;compareRange.hidden=false;compareLabels.hidden=false;const split=Number(compareRange.value);positionHandle(split);compareRange.setAttribute('aria-valuenow',String(Math.round(split)));compareLayer.style.clipPath='inset(0 0 0 '+split+'%)';compareLine.style.left=split+'%';year.textContent='2016 / 2026';acquired.textContent=shortDate(entry.dates[0])+' · '+shortDate(entry.dates[10]);acquired.setAttribute('title',entry.dates[0]+' / '+entry.dates[10]);year.classList.add('is-comparing');viewer.setAttribute('aria-valuetext','Comparing 2016 and 2026');toast('');applyZoom();revealHud(4000)}catch{
     if(run!==compareRun||entry!==glacier)return;
     leaveComparison();
     show(selected);
