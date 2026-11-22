@@ -19,7 +19,7 @@ main{position:absolute;inset:0;touch-action:none;cursor:ns-resize;outline:none}
 #compare-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:center;pointer-events:none}
 #compare-line{position:absolute;top:0;bottom:0;left:50%;width:1px;background:#ffffffb3;pointer-events:none}
 #comparison{position:absolute;inset:0;opacity:0;transition:opacity .8s;pointer-events:none}
-#compare-range{position:absolute;left:24px;top:50%;transform:translate(-50%,-50%);width:72px;height:96px;padding:0;border:0;border-radius:0;background:none;display:flex;align-items:center;justify-content:center;gap:18px;pointer-events:auto;touch-action:none;cursor:ew-resize;color:#fff;filter:drop-shadow(0 1px 2px #000) drop-shadow(0 0 4px #000b)}
+#compare-range{position:absolute;left:24px;bottom:111px;transform:translate(-50%,50%);width:72px;height:96px;padding:0;border:0;border-radius:0;background:none;display:flex;align-items:center;justify-content:center;gap:18px;pointer-events:auto;touch-action:none;cursor:ew-resize;color:#fff;filter:drop-shadow(0 1px 2px #000) drop-shadow(0 0 4px #000b)}
 #compare-range svg{width:12px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 #compare-range .chevron-left{display:none}
 #compare-range.is-between .chevron-left{display:block}
@@ -121,7 +121,7 @@ button:focus-visible{outline:1px solid #ffffffb3;outline-offset:3px}
 #reset svg,#compare-toggle svg{width:21px;height:24px;flex:none;stroke-width:1.35}
 #compare-toggle{left:12px;right:auto;z-index:1}
 #comparison:has(#compare-range:not([hidden])){opacity:1}
-#compare-labels{position:absolute;top:calc(50% - 27px);left:50%;transform:translateX(-50%);display:flex;justify-content:space-between;width:88px;color:#fff;font-size:13px;font-weight:600;line-height:1;text-shadow:0 1px 2px #000,0 0 6px #000,0 0 3px #000}
+#compare-labels{position:absolute;bottom:78px;left:50%;transform:translateX(-50%);display:flex;justify-content:space-between;width:88px;color:#fff;font-size:13px;font-weight:600;line-height:1;text-shadow:0 1px 2px #000,0 0 6px #000,0 0 3px #000}
 </style>
 </head>
 <body>
